@@ -1,0 +1,339 @@
+package App;
+
+import engin.LinkNode;
+import engin.PluginNode;
+import org.dom4j.Attribute;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
+import workplugins.IPlugin;
+
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.*;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
+
+public class Util {
+
+    /**
+     * 读取Jar
+     * @param path 路径
+     * @return
+     * @throws IOException
+     */
+    public static List<IPlugin> getPlugin(String path) throws IOException {
+        List<IPlugin> lst = new ArrayList<>();
+        JarFile jarFile = new JarFile(path);
+        Enumeration<JarEntry> e = jarFile.entries();
+
+        JarEntry entry;
+        while (e.hasMoreElements()) {
+            entry = (JarEntry) e.nextElement();
+            //
+            if (entry.getName().indexOf("META-INF") < 0 && entry.getName().indexOf(".class") >= 0) {
+                String classFullName = entry.getName();
+                //去掉后缀.class
+                String className = classFullName.substring(0, classFullName.length() - 6).replace("/", ".");
+                System.out.println(className);
+
+                Class<?> c = null;
+                try {
+                    try {
+                        // 用className这个类来装载c,但还没有实例化
+                        c = Class.forName(className);
+                        if (!c.isInterface()) {
+                            try {
+
+
+                                if (!c.getConstructor().trySetAccessible()) {
+                                    continue;
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                continue;
+                            }
+                            var obj=c.getConstructor().newInstance();
+                            if (IPlugin.class.isInstance(obj)) {
+
+                                lst.add((IPlugin) obj);
+                            }
+                        }
+                    } catch (ClassNotFoundException e1) {
+                        e1.printStackTrace();
+
+
+                    }
+                } catch (Exception e1) {
+
+                }
+
+            }
+        }
+        return lst;
+    }
+
+    /**
+     * 获取文件
+     * @param path
+     * @param fileNameList
+     * @return
+     */
+    public static ArrayList<String> readFiles1(String path, ArrayList<String> fileNameList) {
+        File file = new File(path);
+        if (file.isDirectory()) {
+            File[] files = file.listFiles();
+            for (int i = 0; i < files.length; i++) {
+                if (files[i].isDirectory()) {
+                    readFiles1(files[i].getPath(), fileNameList);
+                } else {
+                    String path1 = files[i].getPath();
+                    String fileName = path1.substring(path1.lastIndexOf("\\") + 1);
+                    fileNameList.add(path1);
+                }
+            }
+        } else {
+            String path1 = file.getPath();
+            String fileName = path1.substring(path1.lastIndexOf("\\") + 1);
+            fileNameList.add(fileName);
+        }
+        return fileNameList;
+    }
+
+    /**
+     *
+     * @param fileNameList
+     * @return
+     * @throws NoSuchMethodException
+     * @throws MalformedURLException
+     * @throws ClassNotFoundException
+     */
+    private static  List<IPlugin> getCurrentPlugin(ArrayList<String> fileNameList) throws NoSuchMethodException, MalformedURLException, ClassNotFoundException {
+        List<IPlugin> lst = new ArrayList<>();
+        for (var file:fileNameList
+             ) {
+            var classFullName = file;
+            String className = classFullName.substring(0, classFullName.length() - 6).replace("/", ".");
+            System.out.println(className);
+            //
+             if(!classFullName.endsWith(".class"))
+             {
+                 continue;
+             }
+                File file1 = new File(file);
+                var clazzPath = file1.getParentFile();
+                URL url=clazzPath.toURI().toURL();
+           // 然后加载类：
+            ClassLoader loader = new URLClassLoader(new URL[]{url});
+            var clsname=className.substring(clazzPath.getParentFile().getAbsolutePath().length()+1);
+             clsname=clsname.replace("\\",".");
+           // 然后加载类：
+            Class<?> cls=loader.loadClass(clsname);
+
+                Class<?> c = null;
+
+                try {
+                    // 用className这个类来装载c,但还没有实例化
+                 //  c = Class.forName(clsname);
+                    if (!cls.isInterface()) {
+                       try {
+                           if (!cls.getConstructor().trySetAccessible()) {
+                               continue;
+                           }
+                       }
+                       catch (Exception ex)
+                       {
+                           continue;
+                       }
+                      var obj=  cls.getConstructor().newInstance();
+                        if (IPlugin.class.isInstance(obj)) {
+
+                            lst.add((IPlugin) obj);
+                        }
+                    }
+                } catch (InstantiationException e1) {
+                    e1.printStackTrace();
+                } catch (InvocationTargetException e) {
+                    throw new RuntimeException(e);
+                } catch (IllegalAccessException e) {
+                    throw new RuntimeException(e);
+                }
+
+
+        }
+            return lst;
+    }
+
+    /**
+     * 获取当前包的组件
+     * @return
+     */
+    public static List<IPlugin> getCurrenPlugin() {
+        List<IPlugin> lst = new ArrayList<>();
+        try {
+            ArrayList<String> lstcls = new ArrayList<>();
+            var pkgs = Util.class.getModule().getPackages();
+            final File f = new File(Util.class.getProtectionDomain().getCodeSource().getLocation().getPath());
+            readFiles1(f.getPath(), lstcls);
+            lst = getCurrentPlugin(lstcls);
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+        return lst;
+    }
+
+
+    /**
+     * xml节点转换PluginNode
+     * @param element
+     * @return
+     */
+    private static  PluginNode getNode(Element element)
+    {
+        int num=0;
+        PluginNode pluginNode=new PluginNode();
+       var attr= element.attribute("name");
+       if(attr!=null)
+       {
+           pluginNode.name= attr.getText();
+       }
+       attr=element.attribute("flage");
+        if(attr!=null)
+        {
+            pluginNode.flage=  attr.getText();
+        }
+        attr=element.attribute("arg");
+        if(attr!=null)
+        {
+            pluginNode.arg=  attr.getText();
+        }
+        attr=element.attribute("condtion");
+        if(attr!=null)
+        {
+            pluginNode.condition= attr.getText();
+        }
+        attr=element.attribute("Instance");
+        if(attr!=null)
+        {
+           String count= attr.getText();
+           num=Integer.valueOf(count);
+        }
+        var child=element.element("Args");
+        if(child!=null)
+        {
+            Element args= child;
+            if(args!=null)
+            {
+                Map<String,String> map=new HashMap<>();
+                List<Element> arglst=args.elements();
+                for (Element e:arglst
+                ) {
+                    map.put(e.getName(),e.getText());
+                }
+                pluginNode.map=map;
+            }
+        }
+        if(num>1)
+        {
+            var childs=element.element("Nodes");
+            if(childs!=null)
+            {
+                pluginNode.pluginList=new ArrayList<>();
+                List<Element> lst=  childs.elements("Node");
+                for (Element nodetmp:lst
+                     ) {
+                     PluginNode tmp=new PluginNode();
+                     tmp.name=pluginNode.name;
+                    attr=nodetmp.attribute("flage");
+                    if(attr!=null)
+                    {
+                        tmp.flage=  attr.getText();
+                    }
+                    attr=nodetmp.attribute("arg");
+                    if(attr!=null)
+                    {
+                        tmp.arg=  attr.getText();
+                    }
+                    attr=nodetmp.attribute("condtion");
+                    if(attr!=null)
+                    {
+                        tmp.condition= attr.getText();
+                    }
+                    attr=nodetmp.attribute("devid");
+                    if(attr!=null)
+                    {
+                        tmp.devid= attr.getText();
+                    }
+                    pluginNode.pluginList.add(tmp);
+                }
+
+            }
+        }
+        if(element.elements("Plugin").size()>0)
+        {
+           pluginNode.nexNode= getNode(element.element("Plugin"));
+        }
+        return  pluginNode;
+    }
+
+    /**
+     * 获取链路
+     * @param path xml路径
+     * @return
+     */
+    public  static List<LinkNode> getNode(String path)
+    {
+        String file = path;
+        SAXReader reader = new SAXReader();
+        try {
+            Document document = reader.read(file);
+            //获取XML文档的根节点，即hr标签
+            Element root = document.getRootElement();
+            //elements方法用于获取指定的标签集合
+            List<Element> employees =  root.elements("Link");
+            List<LinkNode> lst=new ArrayList<>();
+            for(Element employee : employees){
+
+                LinkNode node=new LinkNode();
+              Attribute att= employee.attribute("name");
+              if(att!=null)
+              {
+                  node.name=att.getText();
+              }
+                List<Element>  elements= employee.elements("Plugin");
+                node.iniPlugin=new ArrayList<>();
+                for (Element  e:elements
+                     ) {
+                    PluginNode tmp=new PluginNode();
+                    tmp.name=  e.attribute("name").getText();
+                    if(e.elements("Plugin").size()==0)
+                    {
+                        node.iniPlugin.add(tmp);
+                    }
+                    else
+                    {
+                        node.root=getNode(e);
+                    }
+                }
+                lst.add(node);
+            }
+            return lst;
+        } catch (DocumentException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+     return null;
+    }
+
+
+
+}
+
