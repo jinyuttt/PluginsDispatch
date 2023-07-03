@@ -1,12 +1,15 @@
 package App;
 
+import bsh.EvalError;
+import bsh.Interpreter;
 import com.google.gson.Gson;
 import com.jayway.jsonpath.JsonPath;
 
 import java.io.IOException;
+import java.util.Map;
 
 public class Application {
-    public  static void  main(String[] args) throws IOException, NoSuchMethodException, ClassNotFoundException {
+    public  static void  main(String[] args) throws  EvalError {
         // Util.getCurrenPlugin();
         EnginCore enginCore=new EnginCore();
         enginCore.start();
@@ -20,5 +23,14 @@ public class Application {
 //      var jsn=  gson.toJson(p);
 //
 //      Object ss=  JsonPath.read(jsn, "$.user.name");
+
+//        String condtion="$pp.devID==#devid";
+//        Interpreter interpreter = new Interpreter();
+//
+//            interpreter.set("$pp.devID", "5");
+//           interpreter.set("#devid", "5");
+//
+//        Object ret= interpreter.eval(condtion);
+//        System.out.println(ret);
     }
 }

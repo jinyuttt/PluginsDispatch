@@ -18,5 +18,10 @@ public class LocImpl  implements IOutPutPlugin {
         System.out.println("Loc_stop");
     }
 
+    @Override
+    public void finsh() {
+
+    }
+
 
 }

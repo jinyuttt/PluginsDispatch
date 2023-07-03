@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <DW>
-        <Link name="">
+        <Link name="3">
             <Plugin name="DB"/>
             <Plugin name="Cap" Flage="PP" condtion="devid" Instance="1" arg="" >
                 <Plugin name="DDC" condtion="DevID" >
