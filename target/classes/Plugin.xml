@@ -2,34 +2,33 @@
 <DW>
         <Link name="3">
             <Plugin name="DB"/>
-            <Plugin name="Cap" Flage="PP" condtion="devid" Instance="1" arg="" >
+            <Plugin name="Cap" Flage="PP" condtion="devid" instance="1" arg="" >
                 <Plugin name="DDC" condtion="DevID" >
                     <Args>
                         <taskid>task_id</taskid>
                     </Args>
-                    <Plugin name="Pre" condtion="DevID">
-                        <Plugin name="tpdx" condtion="DevID">
-                            <Plugin name="nbr" condtion="DevID">
-                                <Args>
-                                    <sat>kk.sat</sat>
-                                </Args>
-                                <!--[]表示本节点固定参数-->
-                                <Plugin name="csgj" condtion="$pp.devID=[devid],$pp.devID,[devid]" Instance="5">
-                                    <Nodes>
-                                        <Node flage="001" devid="001" />
-                                        <Node flage="002" devid="002" />
-                                        <Node flage="003" devid="002" />
-                                        <Node flage="004" devid="003" />
-                                        <Node flage="005" devid="004" />
-                                    </Nodes>
-                                    <Plugin name="loc" condtion="DevID">
-                                    </Plugin>
-                                </Plugin>
+                    <Plugin name="Pre" condtion="DevID" child="KK"/>
+                    <Plugin name="tpdx" condtion="DevID" child="KK"/>
+                    <Plugin name="nbr" condtion="DevID" ischild="true" flage="KK">
+                        <Args>
+                            <sat>kk.sat</sat>
+                        </Args>
+                        <!--[]表示本节点固定参数-->
+                        <Plugin name="csgj" condtion="$pp.devID=[devid],$pp.devID,[devid]" instance="5">
+                            <Nodes>
+                                <Node flage="001" devid="001" />
+                                <Node flage="002" devid="002" />
+                                <Node flage="003" devid="002" />
+                                <Node flage="004" devid="003" />
+                                <Node flage="005" devid="004" />
+                            </Nodes>
+                            <Plugin name="loc" condtion="DevID">
                             </Plugin>
                         </Plugin>
                     </Plugin>
                 </Plugin>
-            </Plugin>
+                </Plugin>
+
         </Link>
 
 </DW>
