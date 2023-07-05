@@ -1,5 +1,7 @@
 package App;
 
+import Task.TaskEntity;
+import Task.TaskModel;
 import bsh.EvalError;
 import bsh.Interpreter;
 import com.google.gson.Gson;
@@ -11,8 +13,9 @@ import java.util.Map;
 public class Application {
     public  static void  main(String[] args) throws  EvalError {
         // Util.getCurrenPlugin();
-      EnginCore enginCore=new EnginCore();
-       enginCore.start();
+        TaskEntity.map.put("1",new TaskModel());
+        EnginCore enginCore=new EnginCore();
+        enginCore.start();
 //        Gson gson=new Gson();
 //        var p=new Person();
 //        p.sex="nam";

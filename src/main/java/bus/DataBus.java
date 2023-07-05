@@ -35,9 +35,18 @@ public class DataBus {
             removeMsg();
             start();
         }
-        public void  addData(MsgData obj) {
+
+    /**
+     * 加入数据
+     * @param obj
+     */
+    public void  addData(MsgData obj) {
             queue.add(obj);
             CacheUtil.getInstance().putmap(obj.flage,String.valueOf(obj.msgno),obj);
+            var log=new LogProcess();
+            log.taskid=String.valueOf(obj.taskid);
+            log.flage=obj.flage;
+            LogBus.getInstance().add(log);
         }
 
     /**

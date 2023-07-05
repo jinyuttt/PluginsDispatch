@@ -158,12 +158,8 @@ public class Util {
                             lst.add((IPlugin) obj);
                         }
                     }
-                } catch (InstantiationException e1) {
-                    e1.printStackTrace();
-                } catch (InvocationTargetException e) {
-                    throw new RuntimeException(e);
-                } catch (IllegalAccessException e) {
-                    throw new RuntimeException(e);
+                } catch (Exception e1) {
+                   logger.error(e1);
                 }
 
 

@@ -89,6 +89,18 @@ public class ConvertArgs {
                     }
                 } else if (vlab[i].startsWith("#")) {
                     //全局
+                    String c = vlab[i].substring(1, vlab[i].length() );//去除#
+                    String taskid= TaskEntity.taskid;
+
+                    TaskModel taskModel=TaskEntity.map.getOrDefault(taskid,null);
+                    if(taskModel!=null)
+                    {
+                        var jsn = gson.toJson(taskModel);
+                        Object v = JsonPath.read(jsn, "$" + c);
+                        String jsonElement = gson.toJson(v);
+                        JsonElement jsonElement1 = gson.fromJson(jsonElement, JsonElement.class);
+                        obj.add(me.getKey(),jsonElement1);
+                    }
                 }
 
 
