@@ -11,8 +11,8 @@ import java.util.Map;
 public class Application {
     public  static void  main(String[] args) throws  EvalError {
         // Util.getCurrenPlugin();
-        EnginCore enginCore=new EnginCore();
-        enginCore.start();
+      EnginCore enginCore=new EnginCore();
+       enginCore.start();
 //        Gson gson=new Gson();
 //        var p=new Person();
 //        p.sex="nam";
@@ -24,11 +24,10 @@ public class Application {
 //
 //      Object ss=  JsonPath.read(jsn, "$.user.name");
 
-//        String condtion="$pp.devID==#devid";
+//        String condtion="$pp.devID==devid";
 //        Interpreter interpreter = new Interpreter();
-//
-//            interpreter.set("$pp.devID", "5");
-//           interpreter.set("#devid", "5");
+//        interpreter.set("$pp.devID", "5");
+//        interpreter.set("devid", "5");
 //
 //        Object ret= interpreter.eval(condtion);
 //        System.out.println(ret);

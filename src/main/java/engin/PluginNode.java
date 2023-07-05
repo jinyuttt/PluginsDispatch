@@ -37,6 +37,11 @@ public class PluginNode {
     public PluginNode nexNode;
 
     /**
+     * 下级节点
+     */
+    public List<PluginNode> nextNode;
+
+    /**
      * 次节点设备ID
      */
     public String devid;

@@ -2,7 +2,10 @@ package cache;
 
 
 import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.CacheLoader;
 import com.github.benmanes.caffeine.cache.Caffeine;
+import com.github.benmanes.caffeine.cache.LoadingCache;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.HashMap;
 import java.util.List;
@@ -33,20 +36,26 @@ public class CacheUtil {
     {
         cache = Caffeine.newBuilder()
                 //初始数量
-                .initialCapacity(10)
+               .initialCapacity(10)
                 //最大条数
-                .maximumSize(10)
-                .refreshAfterWrite(1, TimeUnit.MINUTES)
+               .maximumSize(10)
+               // .refreshAfterWrite(1, TimeUnit.MINUTES)
                 //expireAfterWrite和expireAfterAccess同时存在时，以expireAfterWrite为准
                 //最后一次写操作后经过指定时间过期
                 .expireAfterWrite(20, TimeUnit.MINUTES)
                 //最后一次读或写操作后经过指定时间过期
                 .expireAfterAccess(20, TimeUnit.MINUTES)
                 //监听缓存被移除
-                .removalListener((key, val, removalCause) -> { })
+               .removalListener((key, val, removalCause) -> { })
                 //记录命中
-                .recordStats()
-                .build();
+               .recordStats()
+                .build(new CacheLoader<String,Object>(){
+
+                    @Override
+                    public @Nullable Object load(String s) throws Exception {
+                        return null;
+                    }
+                });
     }
 
 
@@ -78,7 +87,10 @@ public class CacheUtil {
      */
     public  void  putmap(String key,String k,Object obj)
     {
-
+        if(key==null||k==null)
+        {
+            return;
+        }
        Map<String,Object> map=(Map<String,Object>)cache.getIfPresent(key);
        if(map==null)
        {
@@ -100,13 +112,11 @@ public class CacheUtil {
 
     public  void  remove(String key,String k)
     {
-
         Map<String,Object> map=(Map<String,Object>)cache.getIfPresent(key);
         if(map!=null)
         {
             map.remove(k);
         }
-
     }
 
 

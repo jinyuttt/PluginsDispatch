@@ -2,6 +2,8 @@ package App;
 
 import engin.LinkNode;
 import engin.PluginNode;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.dom4j.Attribute;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -21,6 +23,7 @@ import java.util.jar.JarFile;
 
 public class Util {
 
+   static Log logger= LogFactory.getLog(EnginCore.class);
     /**
      * 读取Jar
      * @param path 路径
@@ -31,7 +34,6 @@ public class Util {
         List<IPlugin> lst = new ArrayList<>();
         JarFile jarFile = new JarFile(path);
         Enumeration<JarEntry> e = jarFile.entries();
-
         JarEntry entry;
         while (e.hasMoreElements()) {
             entry = (JarEntry) e.nextElement();
@@ -67,7 +69,7 @@ public class Util {
                         }
                     } catch (ClassNotFoundException e1) {
                         e1.printStackTrace();
-
+                        logger.error(e1);
 
                     }
                 } catch (Exception e1) {
@@ -94,7 +96,6 @@ public class Util {
                     readFiles1(files[i].getPath(), fileNameList);
                 } else {
                     String path1 = files[i].getPath();
-                    String fileName = path1.substring(path1.lastIndexOf("\\") + 1);
                     fileNameList.add(path1);
                 }
             }
@@ -199,6 +200,7 @@ public class Util {
     private static  PluginNode getNode(Element element)
     {
         int num=0;
+        //处理当前节点
         PluginNode pluginNode=new PluginNode();
        var attr= element.attribute("name");
        if(attr!=null)
@@ -220,7 +222,7 @@ public class Util {
         {
             pluginNode.condition= attr.getText();
         }
-        attr=element.attribute("Instance");
+        attr=element.attribute("instance");
         if(attr!=null)
         {
            String count= attr.getText();
@@ -243,6 +245,7 @@ public class Util {
         }
         if(num>1)
         {
+            //处理本节点多实例
             var childs=element.element("Nodes");
             if(childs!=null)
             {
@@ -279,7 +282,47 @@ public class Util {
         }
         if(element.elements("Plugin").size()>0)
         {
-           pluginNode.nexNode= getNode(element.element("Plugin"));
+          // pluginNode.nexNode= getNode(element.element("Plugin"));
+            //继续处理子节点
+           List<Element> list=  element.elements("Plugin");
+           pluginNode.nextNode=new ArrayList<>();
+            for (Element ele:list
+                 ) {
+
+               var eattr=  ele.attribute("ischild");
+               if(eattr!=null)
+               {
+                   if(eattr.getText().trim().toLowerCase().equals("true"))
+                   {
+                       //只是跳转子节点，不是本节点的子节点
+                       continue;
+                   }
+               }
+                pluginNode.nextNode.add(getNode(ele));
+            }
+        }
+        else
+        {
+            //跳转子节点
+            attr=element.attribute("child");
+            if(attr!=null)
+            {
+                pluginNode.nextNode=new ArrayList<>();
+                String[] chlds=attr.getText().split(",");
+                for (String flagearr:chlds
+                     ) {
+                      String str="//Plugin[@flage='"+flagearr+"']";
+                    var nodes=  element.selectNodes(str);
+                    if(nodes!=null) {
+                        Element childo = (Element) nodes.get(0);
+                        if (childo != null) {
+                            pluginNode.nextNode.add(getNode(childo));
+                        }
+                    }
+                }
+
+
+            }
         }
         return  pluginNode;
     }
@@ -301,7 +344,6 @@ public class Util {
             List<Element> employees =  root.elements("Link");
             List<LinkNode> lst=new ArrayList<>();
             for(Element employee : employees){
-
                 LinkNode node=new LinkNode();
               Attribute att= employee.attribute("name");
               if(att!=null)

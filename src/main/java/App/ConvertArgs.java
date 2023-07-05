@@ -1,6 +1,8 @@
 package App;
 
 import PluginEntity.MsgData;
+import Task.TaskEntity;
+import Task.TaskModel;
 import bsh.EvalError;
 import bsh.Interpreter;
 import cache.CacheUtil;
@@ -29,12 +31,10 @@ public class ConvertArgs {
      * @throws ClassNotFoundException
      */
     public static MsgData   convertInput(PluginNode node,MsgData msgData) throws ClassNotFoundException {
-
         PluginAnnotation msg = node.plugin.getClass().getAnnotation(PluginAnnotation.class);
         String pkg=  msg.input();
         Class<?> cls= Class.forName(pkg);
         return (MsgData) ConvertArgs.convertMsg(node,msgData,cls);
-
     }
 
     /**
@@ -83,6 +83,7 @@ public class ConvertArgs {
                     obj.add(me.getKey(), jsonElement1);
                 } else if (vlab[i].startsWith("[") && vlab[i].startsWith("]")) {
                     String c = vlab[i].substring(1, vlab[i].length() - 1);
+
                     if (c.toLowerCase().equals("devid")) {
                         obj.addProperty(me.getKey(), node.devid);
                     }
@@ -115,24 +116,35 @@ public class ConvertArgs {
                     String flage = att[0].substring(1);
                     var k = String.valueOf(msgData.msgno);
                     MsgData cur = (MsgData) CacheUtil.getInstance().get(flage, k);
-                    Gson gson = new Gson();
                     var jsn = gson.toJson(cur);
                     String c = condition.replaceAll(att[0], "");
                     Object v = JsonPath.read(jsn, "$" + c);
                     map.put(vlab[i], v);
                 } else if (vlab[i].startsWith("[") && vlab[i].startsWith("]")) {
-                    String c = vlab[i].substring(1, vlab[i].length() - 1);
+                    String c = vlab[i].substring(1, vlab[i].length() - 1);//去除[]
+                    condition=condition.replaceFirst(vlab[i],c);
                     if (c.toLowerCase().equals("devid")) {
-                        map.put(vlab[i], node.devid);
+                        map.put(c, node.devid);
 
                     }
+
                 } else if (vlab[i].startsWith("#")) {
                     //全局
+                    String c = vlab[i].substring(1, vlab[i].length() );//去除#
+                    condition=condition.replaceFirst(vlab[i],c);
+                    String taskid= TaskEntity.taskid;
+                    String instance= String.valueOf(TaskEntity.instance);
+                    TaskModel taskModel=TaskEntity.map.getOrDefault(taskid,null);
+                    if(taskModel!=null)
+                    {
+                        var jsn = gson.toJson(taskModel);
+                        Object v = JsonPath.read(jsn, "$" + c);
+                        map.put(c,v);
+                    }
+
                 }
                 else
                 {
-
-                    Gson gson = new Gson();
                     var jsn = gson.toJson(msgData);
                     Object v = JsonPath.read(jsn, "$"+vlab[i]);
                     map.put(vlab[i], v);

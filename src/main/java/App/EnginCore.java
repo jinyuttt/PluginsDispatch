@@ -1,24 +1,25 @@
 package App;
 
 import engin.LinkNode;
+import engin.PluginEngine;
 import engin.PluginNode;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import workplugins.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class EnginCore {
-
+    Log logger= LogFactory.getLog(EnginCore.class);
     ExecutorService newCachedThreadPool = Executors.newCachedThreadPool();
     public void start()
     {
        String path= this.getClass().getClassLoader().getResource("").getPath();
-
-
         //读取xml
        path= path+"Plugin.xml";
        var lst= Util.getNode(path);
        var lstP=Util.getCurrenPlugin();
-
+        PluginEngine.lst=lst;
         for (LinkNode link:lst
              ) {
             if(link.iniPlugin!=null)
@@ -27,7 +28,6 @@ public class EnginCore {
                      ) {
                     var tmpss=   lstP.stream().filter(p->{
                         PluginAnnotation name =  p.getClass().getAnnotation(PluginAnnotation.class);
-
                         if(IInitPlugin.class.isInstance(p))
                         {
                             if(name.name().toLowerCase().equals(node.name.toLowerCase()))
@@ -124,6 +124,7 @@ public class EnginCore {
                 }
             }
         }
+
         System.out.println("");
     }
 }
