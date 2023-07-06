@@ -9,8 +9,18 @@ public class LocImpl  implements IOutPutPlugin {
 
 
     @Override
+    public void init(String arg) {
+
+    }
+
+    @Override
     public void addData(MsgData obj) {
         System.out.println("Loc_addData");
+    }
+
+    @Override
+    public void responce(byte[] data) {
+
     }
 
     @Override

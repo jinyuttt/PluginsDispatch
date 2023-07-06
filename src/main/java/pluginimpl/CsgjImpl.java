@@ -10,8 +10,18 @@ public class CsgjImpl implements IProcessPlugin {
 
 
     @Override
+    public void init(String arg) {
+
+    }
+
+    @Override
     public void addData(MsgData obj) {
         System.out.println("CSGJ_addData");
+    }
+
+    @Override
+    public void responce(byte[] data) {
+
     }
 
     @Override

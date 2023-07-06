@@ -1,6 +1,7 @@
 package App;
 
 import engin.LinkNode;
+import engin.PluginEngine;
 import engin.PluginNode;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -224,6 +225,25 @@ public class Util {
            String count= attr.getText();
            num=Integer.valueOf(count);
         }
+        attr=element.attribute("subtopic");
+        if(attr!=null)
+        {
+            String topic= attr.getText();
+            pluginNode.subTopic=new ArrayList<>();
+            String[] strs=topic.split(",");
+            pluginNode.subTopic.addAll(Arrays.asList(strs));
+            for (String tmp:strs
+                 ) {
+              var lst=  PluginEngine.topic.getOrDefault(topic,null);
+              if(lst==null)
+              {
+                  lst=new ArrayList<>();
+                  PluginEngine.topic.put(tmp,lst);
+              }
+              lst.add(pluginNode);
+
+            }
+        }
         var child=element.element("Args");
         if(child!=null)
         {
@@ -270,6 +290,24 @@ public class Util {
                     if(attr!=null)
                     {
                         tmp.devid= attr.getText();
+                    }
+                    attr=element.attribute("subtopic");
+                    if(attr!=null)
+                    {
+                        String topic= attr.getText();
+                        tmp.subTopic=new ArrayList<>();
+                        String[] strs=topic.split(",");
+                        pluginNode.subTopic.addAll(Arrays.asList(strs));
+                        for (String tmptopic:strs
+                        ) {
+                            var lstNode=  PluginEngine.topic.getOrDefault(tmptopic,null);
+                            if(lstNode==null)
+                            {
+                                lstNode=new ArrayList<>();
+                                PluginEngine.topic.put(tmptopic,lstNode);
+                            }
+                            lstNode.add(tmp);
+                        }
                     }
                     pluginNode.pluginList.add(tmp);
                 }

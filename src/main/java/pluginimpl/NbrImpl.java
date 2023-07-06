@@ -10,7 +10,17 @@ public class NbrImpl implements IProcessPlugin {
 
 
     @Override
+    public void init(String arg) {
+
+    }
+
+    @Override
     public void addData(MsgData obj) {
+
+    }
+
+    @Override
+    public void responce(byte[] data) {
 
     }
 

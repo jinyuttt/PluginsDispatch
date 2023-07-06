@@ -2,7 +2,7 @@
 <DW>
         <Link name="bil">
             <Plugin name="DB"/>
-            <Plugin name="Cap" Flage="PP" condtion="devid" instance="1" arg="" >
+            <Plugin name="Cap" Flage="PP" condtion="devid" instance="1" arg=""  subtopic="">
                 <Plugin name="DDC" condtion="DevID" >
                     <Args>
                         <taskid>task_id</taskid>
@@ -14,7 +14,7 @@
                             <sat>kk.sat</sat>
                         </Args>
                         <!--[]表示本节点固定参数-->
-                        <Plugin name="csgj" condtion="$pp.devID=[devid],$pp.devID,[devid]" instance="5">
+                        <Plugin name="csgj" condtion="$pp.devID=[devid],$pp.devID,[devid]" instance="5" policy="">
                             <Nodes>
                                 <Node flage="001" devid="001" />
                                 <Node flage="002" devid="002" />

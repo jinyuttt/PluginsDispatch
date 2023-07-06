@@ -20,8 +20,18 @@ public class CollectSingle implements IInputPlugin {
     }
 
     @Override
+    public void init(String arg) {
+
+    }
+
+    @Override
     public void addData(MsgData obj) {
         System.out.println("Cap_addData");
+
+    }
+
+    @Override
+    public void responce(byte[] data) {
 
     }
 

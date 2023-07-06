@@ -7,6 +7,9 @@ import engin.PluginNode;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
+/**
+ * 处理专门的日志信息
+ */
 public class LogBus {
     private static class LazyHolder {
         private static final LogBus INSTANCE = new LogBus();

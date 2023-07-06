@@ -4,7 +4,6 @@ package cache;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.CacheLoader;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import com.github.benmanes.caffeine.cache.LoadingCache;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.HashMap;
@@ -30,7 +29,7 @@ public class CacheUtil {
     }
 
     /**
-     * 初始化
+     * 初始化 加入的数据默认20分钟了必须处理
      */
     private  void  init()
     {

@@ -17,8 +17,18 @@ public class DBImpl implements IInitPlugin {
     }
 
     @Override
+    public void init(String arg) {
+
+    }
+
+    @Override
     public void addData(MsgData obj) {
         System.out.println("DB_stop");
+    }
+
+    @Override
+    public void responce(byte[] data) {
+
     }
 
     @Override

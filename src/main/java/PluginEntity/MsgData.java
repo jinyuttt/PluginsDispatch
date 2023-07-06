@@ -4,8 +4,19 @@ package PluginEntity;
  * 数据
  */
 public abstract class MsgData {
-    public long taskid;
+
+    /**
+     * 任务ID
+     */
+    public String taskid;
+
+    /**
+     * 数据节点标识
+     */
     public   String flage;
 
-    public  long msgno=0;
+    /**
+     * 一次流程的数据编号
+     */
+    public   long msgno=0;
 }

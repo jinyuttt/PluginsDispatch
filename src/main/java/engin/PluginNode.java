@@ -1,6 +1,7 @@
 package engin;
 
 import workplugins.IPlugin;
+import workplugins.Policy;
 
 import java.util.List;
 import java.util.Map;
@@ -34,11 +35,6 @@ public class PluginNode {
     /**
      * 下级节点
      */
-    public PluginNode nexNode;
-
-    /**
-     * 下级节点
-     */
     public List<PluginNode> nextNode;
 
     /**
@@ -47,7 +43,7 @@ public class PluginNode {
     public String devid;
 
     /**
-     * 本节点组件
+     * 本节点组件实例
      */
     public IPlugin plugin;
 
@@ -60,5 +56,25 @@ public class PluginNode {
      * 数据转换关系
      */
     public Map<String,String> map;
+
+    /**
+     * 多实例时调用策略
+     */
+    public Policy policy=Policy.Order;
+
+    /**
+     * 轮训策略
+     */
+    public int  index=0;
+
+    /**
+     * 订阅主题
+     */
+    public List<String> subTopic;
+
+    /**
+     * 最新一包数据
+     */
+    public  long msgno=0;
 
 }

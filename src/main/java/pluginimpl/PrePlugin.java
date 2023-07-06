@@ -9,8 +9,18 @@ import workplugins.PluginAnnotation;
 public class PrePlugin implements IProcessPlugin {
 
     @Override
+    public void init(String arg) {
+
+    }
+
+    @Override
     public void addData(MsgData obj) {
         System.out.println("Pre_addData");
+    }
+
+    @Override
+    public void responce(byte[] data) {
+
     }
 
     @Override

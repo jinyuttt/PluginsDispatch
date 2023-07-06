@@ -90,7 +90,7 @@ public class ConvertArgs {
                 } else if (vlab[i].startsWith("#")) {
                     //全局
                     String c = vlab[i].substring(1, vlab[i].length() );//去除#
-                    String taskid= TaskEntity.taskid;
+                    String taskid= msgData.taskid;
 
                     TaskModel taskModel=TaskEntity.map.getOrDefault(taskid,null);
                     if(taskModel!=null)
@@ -118,7 +118,12 @@ public class ConvertArgs {
      * @throws EvalError
      */
     public static boolean  convertCondition(PluginNode node,MsgData msgData) throws EvalError {
+
         String condition=node.condition;
+        if(condition==null||condition.isEmpty())
+        {
+            return  true;
+        }
         String[] vlab=condition.split(",");
         Map<String,Object> map=new HashMap<>();
         if(vlab.length>1) {
@@ -144,8 +149,7 @@ public class ConvertArgs {
                     //全局
                     String c = vlab[i].substring(1, vlab[i].length() );//去除#
                     condition=condition.replaceFirst(vlab[i],c);
-                    String taskid= TaskEntity.taskid;
-                    String instance= String.valueOf(TaskEntity.instance);
+                    String taskid= msgData.taskid;
                     TaskModel taskModel=TaskEntity.map.getOrDefault(taskid,null);
                     if(taskModel!=null)
                     {

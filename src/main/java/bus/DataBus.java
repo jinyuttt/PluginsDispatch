@@ -7,7 +7,9 @@ import engin.PluginEngine;
 import engin.PluginNode;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import workplugins.Policy;
 
+import java.util.ArrayList;
 import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
@@ -29,7 +31,9 @@ public class DataBus {
     private  BlockingQueue<MsgData> queue=new ArrayBlockingQueue<MsgData>(1000);
 
 
-
+    /**
+     * 需要移除的数据
+     */
     private BlockingQueue<Long> msgqueue=new ArrayBlockingQueue<>(10000);
         private DataBus (){
             removeMsg();
@@ -159,15 +163,25 @@ public class DataBus {
                             continue;
                         }
                         var next = linkNode.get().root;
-                        //找到数据节点
-                        var node=getFlageNode(next,msg.flage);
-                        if(node==null)
+                        PluginNode node=null;
+                        if(msg.flage.equals(TaskEntity.rootFlage))
                         {
-                            logger.error("插件标识与数据标识不匹配，请检查流程中插件标识与数据标识,数据局标识："+msg.flage);
-                            continue;
+                            //单独处理接收的任务启动
+                            node=new PluginNode();
+                            node.pluginList=new ArrayList<>();
+                            node.nextNode=new ArrayList<>();
+                            node.nextNode.add(node);
+                        }
+                        else {
+                            //找到数据节点
+                            node = getFlageNode(next, msg.flage);
+                            if (node == null) {
+                                logger.error("插件标识与数据标识不匹配，请检查流程中插件标识与数据标识,数据局标识：" + msg.flage);
+                                continue;
+                            }
                         }
                         //找到下一级节点
-                        var child=node.pluginList;
+                        var child=node.nextNode;
                         if(child!=null)
                         {
                            logger.error("插件无下级节点，不应该返回数据或配置流程错误");
@@ -177,14 +191,49 @@ public class DataBus {
                         for (PluginNode childnode:child
                              ) {
                             try {
+                                //准备调度下一级
                                 if(ConvertArgs.convertCondition(childnode,msg))
                                 {
                                     MsgData rsp= null;
                                     try {
                                         rsp = ConvertArgs.convertInput(childnode,msg);
-                                        childnode.plugin.addData(rsp);
+                                        if(childnode.pluginList==null||childnode.pluginList.size()==0) {
+                                            childnode.plugin.addData(rsp);
+                                        }
+                                        else
+                                        {
+                                            //多实例
+                                            if(node.policy== Policy.All) {
+                                                for (PluginNode tmp : node.pluginList
+                                                ) {
+                                                    tmp.plugin.addData(rsp);
+                                                }
+                                            }
+                                            else  if(node.policy==Policy.Order)
+                                            {
+                                                 int index= node.index%node.pluginList.size();
+                                                  var cur= node.pluginList.get(index);
+                                                  cur.plugin.addData(rsp);
+                                                  node.index++;
+                                            }
+                                            else  if(node.policy==Policy.Robin)
+                                            {
+                                                //负载均衡，准备算法
+
+                                            }
+                                            else
+                                            {
+                                                for (PluginNode tmp : node.pluginList
+                                                ) {
+                                                    if(ConvertArgs.convertCondition(tmp,rsp)) {
+                                                        tmp.plugin.addData(rsp);
+                                                    }
+                                                }
+                                            }
+
+                                        }
                                         //调度插件还有下一级
-                                        if(childnode.pluginList!=null&&childnode.pluginList.size()>0)
+                                        if(childnode.nextNode!=null&&childnode.nextNode.size()>0)
                                         {
                                             num++;
                                         }

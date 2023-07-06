@@ -10,8 +10,18 @@ public class DDCImpl implements IProcessPlugin {
 
 
     @Override
+    public void init(String arg) {
+
+    }
+
+    @Override
     public void addData(MsgData obj) {
         System.out.println("DDCp_addData");
+    }
+
+    @Override
+    public void responce(byte[] data) {
+
     }
 
     @Override
