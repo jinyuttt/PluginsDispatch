@@ -11,7 +11,7 @@ import engin.PluginNode;
 import workplugins.PluginAnnotation;
 
 public class ServiceImpl {
-   MsgBus bus=null;
+   MsgBus bus=new MsgBus();
    Gson gson=new Gson();
     public void ini(String[] addr,String[] topic)
     {

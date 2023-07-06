@@ -9,10 +9,13 @@ import java.util.concurrent.BlockingQueue;
 
 public class MsgBus {
 
-    ZMQ.Socket socket=null;
-    ZMQ.Socket snd=null;
-    static ZContext context = new ZContext(3);
-    BlockingQueue<MsgData> queue=new ArrayBlockingQueue<>(1000);
+    private ZMQ.Socket socket=null;
+    private  ZMQ.Socket snd=null;
+
+    private static ZMQ.Socket snds=null;
+    public static  String localaddress;
+    private  static ZContext context = new ZContext(3);
+    private BlockingQueue<MsgData> queue=new ArrayBlockingQueue<>(1000);
 
     public MsgBus()
     {
@@ -43,7 +46,7 @@ public class MsgBus {
     }
     public void  subscribe(String topic)
     {
-          socket.sendMore(topic);
+          socket.subscribe(topic);
     }
     public void  start()
     {
@@ -68,5 +71,20 @@ public class MsgBus {
     {
         snd.sendMore(topic);
         snd.send(data);
+    }
+
+    public static void  send(String topic,String data)
+    {
+        if(snds==null)
+        {
+            snds=context.createSocket(SocketType.PUB);
+           if(!localaddress.startsWith("tcp"))
+           {
+               localaddress="tcp://"+localaddress;
+           }
+            snds.bind(localaddress);
+        }
+        snds.sendMore(topic);
+        snds.send(data);
     }
 }

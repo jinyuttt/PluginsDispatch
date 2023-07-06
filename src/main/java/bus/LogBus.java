@@ -1,6 +1,7 @@
 package bus;
 
 import Task.TaskEntity;
+import com.google.gson.Gson;
 import engin.PluginEngine;
 import engin.PluginNode;
 
@@ -23,11 +24,19 @@ public class LogBus {
         init();
     }
 
+    private Gson gson=new Gson();
     /**
      * 所有返回的数据
      */
     private BlockingQueue<LogProcess> queue=new ArrayBlockingQueue<>(1000);
 
+
+    /**
+     * 查找组件
+     * @param child
+     * @param flage
+     * @return
+     */
     private PluginNode getFlageNode(PluginNode child, String flage)
     {
         if(child.flage.equals(flage))
@@ -51,6 +60,10 @@ public class LogBus {
 
         return  null;
     }
+
+    /**
+     * 初始化
+     */
     private void init()
     {
         Thread thread=new Thread(new Runnable() {
@@ -68,8 +81,9 @@ public class LogBus {
                      var lst= PluginEngine.lst.stream().filter(p->p.name.equals(model.name));
                      var link=lst.findFirst();
                      var node=getFlageNode(link.get().root,log.flage);
-
-                     log.msg=String.format("接收到数据{0},设备{1}",node.flage,node.devid);;
+                     log.msg=String.format("接收到数据{0},设备{1}",node.flage,node.devid);
+                     var msg=gson.toJson(log);
+                     MsgBus.send("processlog",msg);
 
                   } catch (InterruptedException e) {
                       throw new RuntimeException(e);

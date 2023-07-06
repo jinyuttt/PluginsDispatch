@@ -1,12 +1,12 @@
 server:
   port: 8081
 
-topic name:
-  sub:1,2,3
+topic-name:
+  sub: 1,2,3
 
 topic-address:
-  sub:"127.0.0.1:5555,127.0.0.1:5556"
-  pub:"*:7777"
+          sub: 127.0.0.1:5555,127.0.0.1:5556
+          pub: "*:7777"
 
 tasktopic:
-  name:task
+     name: task
