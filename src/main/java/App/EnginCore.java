@@ -189,6 +189,9 @@ public class EnginCore {
     //停止任务
     public  static void stop(String taskid)
     {
+
+        //清理处理的数据
+        DataBus.getInstance().clear(taskid);
        var model= TaskEntity.map.getOrDefault(taskid,null);
         if(model!=null) {
           var link=  PluginEngine.lst.stream().filter(p -> p.name.equals(model.name)).findFirst();
@@ -198,12 +201,13 @@ public class EnginCore {
             getNodeStop(node.root);
           }
         }
+
+
     }
 
 
    public  void  starttask(TaskModel model)
    {
-
        var task=new RootMsgData();
        task.taskModel=model;
        task.flage=TaskEntity.rootFlage;

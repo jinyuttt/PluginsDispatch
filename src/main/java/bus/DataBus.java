@@ -15,6 +15,9 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * 组件之间数据传递
+ */
 public class DataBus {
  Log logger= LogFactory.getLog(DataBus.class);
         private static class LazyHolder {
@@ -260,4 +263,10 @@ public class DataBus {
             thread.setName("databus");
             thread.start();
         }
+
+   public  void  clear(String taskid)
+   {
+       queue.removeIf(p->p.taskid.equals(taskid));
+   }
+
 }

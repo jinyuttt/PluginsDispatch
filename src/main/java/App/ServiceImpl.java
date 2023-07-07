@@ -10,6 +10,9 @@ import engin.PluginEngine;
 import engin.PluginNode;
 import workplugins.PluginAnnotation;
 
+/**
+ * 接收外部请求
+ */
 public class ServiceImpl {
    MsgBus bus=new MsgBus();
    Gson gson=new Gson();
@@ -36,8 +39,7 @@ public class ServiceImpl {
                 {
                     //接收到了任务消息
                   var model=  gson.fromJson(new String(msg.data),TaskModel.class);
-
-
+                  EnginCore.getInstance().starttask(model);
                 }
                var lst= PluginEngine.topic.getOrDefault(msg.topic,null);
                if(lst!=null)

@@ -6,6 +6,9 @@ import javax.swing.plaf.PanelUI;
 import java.util.Stack;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * 任务消息
+ */
 public class TaskEntity {
 
     /**
@@ -13,9 +16,7 @@ public class TaskEntity {
      */
     public static ConcurrentHashMap<String, TaskModel> map=new ConcurrentHashMap<String, TaskModel>();
 
-    //public  static  String taskid="";
 
-    //public  static long instance=0;
 
     /**
      * 用户接收任务的主题

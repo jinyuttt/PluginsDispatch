@@ -1,5 +1,8 @@
 package bus;
 
+/**
+ * 日志结构
+ */
 public class LogProcess {
 
     /**

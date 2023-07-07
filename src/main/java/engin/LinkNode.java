@@ -17,6 +17,8 @@ public class LinkNode {
      */
     public  PluginNode root;
 
-
+    /**
+     * 业务流名称
+     */
     public  String name;
 }

@@ -19,10 +19,9 @@ public class Application {
          Map<String,String> maptask= (Map<String, String>) map.get("tasktopic");
         String str=  maptask.get("name");
         TaskEntity.tasktopic=str;
-
         Map<String,String> sub= (Map<String, String>) map.get("topic-name");
-      str=  sub.get("sub");
-      String[] subTopics=str.split(",");
+        str=  sub.get("sub");
+        String[] subTopics=str.split(",");
         Map<String,String> address= (Map<String, String>) map.get("topic-address");
        str= address.get("sub");
        String[] subaddress=str.split(",");

@@ -22,6 +22,9 @@ import java.util.*;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
+/**
+ * 工具类
+ */
 public class Util {
 
    static Log logger= LogFactory.getLog(EnginCore.class);

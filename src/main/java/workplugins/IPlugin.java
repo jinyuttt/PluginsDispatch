@@ -3,7 +3,9 @@ package workplugins;
 import PluginEntity.MsgData;
 import HanderImpl.BusHander;
 
-
+/**
+ * 组件基本功能
+ */
 public interface IPlugin {
 
     /**
@@ -19,10 +21,14 @@ public interface IPlugin {
     void  addData(MsgData obj);
 
     /**
-     * 传入返回数据
+     * 传入返回数据，服务回传的数据必须经过组件再次处理
      * @param data
      */
     void  responce(byte[]data);
+
+    /**
+     * 停止
+     */
     void  stop();
 
   default   IBusHander  getHander()

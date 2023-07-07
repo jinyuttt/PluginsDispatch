@@ -7,6 +7,9 @@ import org.zeromq.ZMQ;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
+/**
+ * zmq 网络传输
+ */
 public class MsgBus {
 
     private ZMQ.Socket socket=null;

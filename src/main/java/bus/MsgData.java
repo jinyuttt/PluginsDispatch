@@ -2,6 +2,9 @@ package bus;
 
 import java.util.Arrays;
 
+/**
+ * 主题
+ */
 public class MsgData {
     public String topic;
 

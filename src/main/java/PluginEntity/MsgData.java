@@ -1,7 +1,7 @@
 package PluginEntity;
 
 /**
- * 数据
+ * 数据 组件之间传递的数据
  */
 public abstract class MsgData {
 
