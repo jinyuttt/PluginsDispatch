@@ -10,3 +10,9 @@ topic-address:
 
 tasktopic:
      name: task
+
+taskcomplate:
+  comstatus:
+      taskid: xxx.xxx.xxx.xx
+      resultid: xxx.xxx.xxx
+      condtion: xx.xxx.endtime==sss.xxx.endtime

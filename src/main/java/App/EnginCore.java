@@ -135,6 +135,7 @@ public class EnginCore {
                             if (ret && DataBus.getInstance().isEmpty(entry.getKey())) {
                                 //任务自动完成
                                 complateTask(entry.getKey());
+                                t.clear(entry.getKey());
                             }
 
                         }
@@ -256,9 +257,13 @@ public class EnginCore {
             LinkNode node=  link.get();
             getNodeStop(node.root,taskid);
           }
+
+            TaskEntity.mapTask.remove(taskid);
+            TaskEntity.mapStatus.put(taskid, TaskStatus.Stop);
+            var t = PluginEngine.taskMap.get(link.get().taskComplete);//找到组件
+            t.clear(taskid);//清除任务
         }
-        TaskEntity.mapTask.remove(taskid);
-        TaskEntity.mapStatus.put(taskid, TaskStatus.Stop);
+
     }
 
     /**

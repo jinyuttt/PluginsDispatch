@@ -27,6 +27,8 @@ public class Application {
         //本地地址
         str = address.get("pub");
         MsgBus.localaddress = str;
+        //
+        AppCst.mapTask= (Map<String, Map<String, String>>) map.get("taskcomplate");
         TaskEntity.mapTask.put("1", new TaskModel());
         EnginCore enginCore = new EnginCore();
         enginCore.start();

@@ -172,6 +172,8 @@ public class DataBus {
                             node.pluginList=new ArrayList<>();
                             node.nextNode=new ArrayList<>();
                             node.nextNode.add(node);
+
+
                         }
                         else {
                             //找到数据节点

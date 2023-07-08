@@ -55,7 +55,21 @@ public class ServiceImpl {
                     //接收到了任务消息
                   var model=  gson.fromJson(new String(msg.data),TaskModel.class);
                   EnginCore.getInstance().startTask(model);
-                  continue;
+                  var linkNode = PluginEngine.lst.parallelStream().filter(p->p.name==model.name).findFirst();
+                    if(linkNode==null)
+                    {
+                        logger.error("流程对应错误，检查任务与流程的对应");
+                        continue;
+                    }
+                    else
+                    {
+                        String name=  linkNode.get().taskComplete;
+                        var t= PluginEngine.taskMap.get(name);
+                       var map= AppCst.mapTask.get(name);
+                        t.initArg(map);
+                        t.init(model);
+                        continue;
+                    }
                 }
 
                 //查找组件
@@ -70,7 +84,7 @@ public class ServiceImpl {
                            var obj= gson.fromJson(jon, JsonObject.class);
                           String taskid= obj.get("taskid").getAsString();
                            //没有下级节点返，则调度任务组件
-                          var model= TaskEntity.mapTask.getOrDefault(String.valueOf(taskid),null);
+                          var model= TaskEntity.mapTask.get(String.valueOf(taskid));
                            //找到对应的流程
                            if(model==null)
                            {
