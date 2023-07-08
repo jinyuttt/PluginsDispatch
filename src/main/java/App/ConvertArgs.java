@@ -92,7 +92,7 @@ public class ConvertArgs {
                     String c = vlab[i].substring(1, vlab[i].length() );//去除#
                     String taskid= msgData.taskid;
 
-                    TaskModel taskModel=TaskEntity.map.getOrDefault(taskid,null);
+                    TaskModel taskModel=TaskEntity.mapTask.getOrDefault(taskid,null);
                     if(taskModel!=null)
                     {
                         var jsn = gson.toJson(taskModel);
@@ -150,7 +150,7 @@ public class ConvertArgs {
                     String c = vlab[i].substring(1, vlab[i].length() );//去除#
                     condition=condition.replaceFirst(vlab[i],c);
                     String taskid= msgData.taskid;
-                    TaskModel taskModel=TaskEntity.map.getOrDefault(taskid,null);
+                    TaskModel taskModel=TaskEntity.mapTask.getOrDefault(taskid,null);
                     if(taskModel!=null)
                     {
                         var jsn = gson.toJson(taskModel);

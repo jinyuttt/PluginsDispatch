@@ -3,6 +3,7 @@ package App;
 import PluginEntity.RootMsgData;
 import Task.TaskEntity;
 import Task.TaskModel;
+import Task.TaskStatus;
 import bus.DataBus;
 import engin.LinkNode;
 import engin.PluginEngine;
@@ -33,6 +34,10 @@ public class EnginCore {
     }
     Log logger= LogFactory.getLog(EnginCore.class);
     ExecutorService newCachedThreadPool = Executors.newCachedThreadPool();
+
+    /**
+     * 启动初始化组件
+     */
     public void start()
     {
        String path= this.getClass().getClassLoader().getResource("").getPath();
@@ -186,13 +191,16 @@ public class EnginCore {
         }
     }
 
-    //停止任务
-    public  static void stop(String taskid)
+    /**
+     * 停止任务
+     * @param taskid
+     */
+    public  static void stopTask(String taskid)
     {
 
         //清理处理的数据
         DataBus.getInstance().clear(taskid);
-       var model= TaskEntity.map.getOrDefault(taskid,null);
+        var model= TaskEntity.mapTask.getOrDefault(taskid,null);
         if(model!=null) {
           var link=  PluginEngine.lst.stream().filter(p -> p.name.equals(model.name)).findFirst();
           if(link!=null)
@@ -201,19 +209,31 @@ public class EnginCore {
             getNodeStop(node.root);
           }
         }
-
-
+        TaskEntity.mapTask.remove(taskid);
+        TaskEntity.mapStatus.put(taskid, TaskStatus.Stop);
     }
 
-
-   public  void  starttask(TaskModel model)
+    /**
+     * 开始任务
+     * @param model
+     */
+   public  void startTask(TaskModel model)
    {
        var task=new RootMsgData();
        task.taskModel=model;
        task.flage=TaskEntity.rootFlage;
-       TaskEntity.map.put(model.taskid,model);
+       TaskEntity.mapTask.put(model.taskid,model);
+       TaskEntity.mapStatus.put(model.taskid,TaskStatus.Start);
        DataBus.getInstance().addData(task);
+
    }
+
+    public  void  complateTask(String taskid)
+    {
+
+        TaskEntity.mapStatus.put(taskid,TaskStatus.Complete);
+
+    }
 }
 
 

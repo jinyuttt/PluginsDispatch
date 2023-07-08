@@ -10,10 +10,8 @@ import org.apache.commons.logging.LogFactory;
 import workplugins.Policy;
 
 import java.util.ArrayList;
-import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 组件之间数据传递
@@ -152,7 +150,7 @@ public class DataBus {
                         {
                             continue;
                         }
-                       var model= TaskEntity.map.getOrDefault(String.valueOf(msg.taskid),null);
+                       var model= TaskEntity.mapTask.getOrDefault(String.valueOf(msg.taskid),null);
                        //找到对应的流程
                         if(model==null)
                         {

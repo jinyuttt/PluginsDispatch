@@ -27,7 +27,7 @@ public class DBImpl implements IInitPlugin {
     }
 
     @Override
-    public void responce(byte[] data) {
+    public void response(byte[] data) {
 
     }
 

@@ -24,14 +24,16 @@ public interface IPlugin {
      * 传入返回数据，服务回传的数据必须经过组件再次处理
      * @param data
      */
-    void  responce(byte[]data);
+    void response(byte[]data);
+
+
 
     /**
      * 停止
      */
     void  stop();
 
-  default   IBusHander  getHander()
+  default IBusHanlder getHander()
   {
             return  new BusHander();
   }

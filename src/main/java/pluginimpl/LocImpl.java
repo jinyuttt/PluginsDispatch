@@ -19,7 +19,7 @@ public class LocImpl  implements IOutPutPlugin {
     }
 
     @Override
-    public void responce(byte[] data) {
+    public void response(byte[] data) {
 
     }
 

@@ -23,7 +23,7 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 /**
- * 工具类
+ * 工具类 读取配置扫描组件
  */
 public class Util {
 

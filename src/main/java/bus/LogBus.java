@@ -73,7 +73,7 @@ public class LogBus {
               {
                   try {
                     var log=  queue.take();
-                    var model=  TaskEntity.map.getOrDefault(log.taskid,null);
+                    var model=  TaskEntity.mapTask.getOrDefault(log.taskid,null);
                       if(model==null)
                       {
                           continue;

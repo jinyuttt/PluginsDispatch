@@ -39,7 +39,7 @@ public class ServiceImpl {
                 {
                     //接收到了任务消息
                   var model=  gson.fromJson(new String(msg.data),TaskModel.class);
-                  EnginCore.getInstance().starttask(model);
+                  EnginCore.getInstance().startTask(model);
                 }
                var lst= PluginEngine.topic.getOrDefault(msg.topic,null);
                if(lst!=null)
@@ -71,7 +71,7 @@ public class ServiceImpl {
                       }
                        if(!issucess)
                        {
-                           node.plugin.responce(msg.data);
+                           node.plugin.response(msg.data);
                        }
                    }
                }

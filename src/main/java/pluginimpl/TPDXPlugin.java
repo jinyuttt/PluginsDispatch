@@ -1,7 +1,6 @@
 package pluginimpl;
 
 import PluginEntity.MsgData;
-import workplugins.IBusHander;
 import workplugins.IProcessPlugin;
 import workplugins.PluginAnnotation;
 
@@ -20,7 +19,7 @@ public class TPDXPlugin implements IProcessPlugin {
     }
 
     @Override
-    public void responce(byte[] data) {
+    public void response(byte[] data) {
 
     }
 
