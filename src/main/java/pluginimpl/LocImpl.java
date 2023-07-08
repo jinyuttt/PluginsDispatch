@@ -24,14 +24,16 @@ public class LocImpl  implements IOutPutPlugin {
     }
 
     @Override
+    public void stop(String taskid) {
+
+    }
+
+    @Override
     public void stop() {
         System.out.println("Loc_stop");
     }
 
-    @Override
-    public void finsh() {
 
-    }
 
 
 }

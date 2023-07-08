@@ -16,7 +16,7 @@ public class TaskEntity {
     /**
      * taskid,
      */
-    public static ConcurrentHashMap<String, TaskStatus> mapStatus=new ConcurrentHashMap<String, TaskStatus>();
+    public static ConcurrentHashMap<String,TaskStatus> mapStatus=new ConcurrentHashMap<String, TaskStatus>();
 
     /**
      * 用户接收任务的主题

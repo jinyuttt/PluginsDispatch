@@ -24,6 +24,11 @@ public class DDCImpl implements IProcessPlugin {
     }
 
     @Override
+    public void stop(String taskid) {
+
+    }
+
+    @Override
     public void stop() {
         System.out.println("DDC_stop");
     }

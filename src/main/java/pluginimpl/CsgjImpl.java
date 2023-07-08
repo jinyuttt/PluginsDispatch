@@ -24,6 +24,11 @@ public class CsgjImpl implements IProcessPlugin {
     }
 
     @Override
+    public void stop(String taskid) {
+
+    }
+
+    @Override
     public void stop() {
         System.out.println("CSGJ_stop");
     }

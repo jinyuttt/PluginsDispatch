@@ -32,6 +32,11 @@ public class DBImpl implements IInitPlugin {
     }
 
     @Override
+    public void stop(String taskid) {
+
+    }
+
+    @Override
     public void stop() {
        System.out.println("DB_stop");
     }

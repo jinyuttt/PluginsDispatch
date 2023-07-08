@@ -12,18 +12,41 @@ import java.util.concurrent.BlockingQueue;
  */
 public class MsgBus {
 
+    /**
+     *订阅
+     */
     private ZMQ.Socket socket=null;
+
+    /**
+     * 发布
+     */
     private  ZMQ.Socket snd=null;
 
+    /**
+     * 发布
+     */
     private static ZMQ.Socket snds=null;
+
+    /**
+     * 发布地址
+     */
     public static  String localaddress;
     private  static ZContext context = new ZContext(3);
+
+    /**
+     * 接收的数据
+     */
     private BlockingQueue<MsgData> queue=new ArrayBlockingQueue<>(1000);
 
     public MsgBus()
     {
         snd = context.createSocket(SocketType.PUB);
     }
+
+    /**
+     * 初始化订阅地址
+     * @param addrs
+     */
     public void ini(String[] addrs)
     {
 
@@ -39,6 +62,11 @@ public class MsgBus {
             socket.connect(addr);
         }
     }
+
+    /**
+     * 获取接收的数据
+     * @return
+     */
     public  MsgData getData()
     {
         try {
@@ -47,10 +75,19 @@ public class MsgBus {
             throw new RuntimeException(e);
         }
     }
+
+    /**
+     * 订阅主题
+     * @param topic
+     */
     public void  subscribe(String topic)
     {
           socket.subscribe(topic);
     }
+
+    /**
+     * 开启订阅接收
+     */
     public void  start()
     {
         while (true)
@@ -64,18 +101,34 @@ public class MsgBus {
         }
     }
 
+    /**
+     * 发布数据
+     * @param topic
+     * @param data
+     */
     public void  sendMsg(String topic,byte[]data)
     {
         snd.sendMore(topic);
         snd.send(data);
 
     }
+
+    /**
+     * 发布数据
+     * @param topic
+     * @param data
+     */
     public void  sendMsg(String topic,String data)
     {
         snd.sendMore(topic);
         snd.send(data);
     }
 
+    /**
+     * 发布数据
+     * @param topic
+     * @param data
+     */
     public static void  send(String topic,String data)
     {
         if(snds==null)

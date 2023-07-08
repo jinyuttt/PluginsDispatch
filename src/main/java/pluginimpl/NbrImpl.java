@@ -24,6 +24,11 @@ public class NbrImpl implements IProcessPlugin {
     }
 
     @Override
+    public void stop(String taskid) {
+
+    }
+
+    @Override
     public void stop() {
 
     }

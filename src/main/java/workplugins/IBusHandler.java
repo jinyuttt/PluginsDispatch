@@ -5,7 +5,7 @@ import PluginEntity.MsgData;
 /**
  * 组件回传数据接口
  */
-public interface IBusHanlder {
+public interface IBusHandler {
 
     /**
      * 传入处理的数据
@@ -18,4 +18,6 @@ public interface IBusHanlder {
      * @param obj
      */
     void  reply(Object obj);
+
+
 }

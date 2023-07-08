@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <DW>
-        <Link name="bil">
+        <Link name="bil" taskcomplete="">
             <Plugin name="DB"/>
-            <Plugin name="Cap" Flage="PP" condtion="devid" instance="1" arg=""  subtopic="">
-                <Plugin name="DDC" condtion="DevID" >
+            <Plugin name="Cap" Flage="PP" condtion="devid" instance="1" arg=""  subtopic="" displayname="" >
+                <Plugin name="DDC" condtion="DevID" convert="arg.ini">
                     <Args>
                         <taskid>task_id</taskid>
                     </Args>
@@ -22,7 +22,7 @@
                                 <Node flage="004" devid="003" />
                                 <Node flage="005" devid="004" />
                             </Nodes>
-                            <Plugin name="loc" condtion="DevID">
+                            <Plugin name="loc" condtion="DevID" subtopic="">
                             </Plugin>
                         </Plugin>
                     </Plugin>

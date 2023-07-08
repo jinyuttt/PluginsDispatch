@@ -23,6 +23,11 @@ public class PrePlugin implements IProcessPlugin {
     }
 
     @Override
+    public void stop(String taskid) {
+
+    }
+
+    @Override
     public void stop() {
         System.out.println("Pre_stop");
     }

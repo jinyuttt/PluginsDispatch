@@ -154,7 +154,7 @@ public class DataBus {
                        //找到对应的流程
                         if(model==null)
                         {
-                            logger.error("流程对应数据");
+                            logger.error("流程对应数据没有");
                             continue;
                         }
                         var linkNode = PluginEngine.lst.parallelStream().filter(p->p.name==model.name).findFirst();
@@ -262,9 +262,52 @@ public class DataBus {
             thread.start();
         }
 
+    /**
+     * 清理任务数据
+      * @param taskid
+     */
    public  void  clear(String taskid)
    {
        queue.removeIf(p->p.taskid.equals(taskid));
    }
+
+    /**
+     * 是否有数据
+     * @return
+     */
+   public boolean isEmpty()
+   {
+      return queue.isEmpty();
+   }
+
+    /**
+     * 数据量
+     * @return
+     */
+    public int size()
+    {
+        return queue.size();
+    }
+
+
+    /**
+     * 获取元素个数
+     * @param taskid
+     * @return
+     */
+    public long getSize(String taskid)
+    {
+      return   queue.stream().filter(p->p.taskid.equals(taskid)).count();
+    }
+
+    /**
+     * 是否有数据
+     * @param taskid
+     * @return
+     */
+    public boolean isEmpty(String taskid)
+    {
+       return queue.stream().filter(p->p.taskid.equals(taskid)).count()==0;
+    }
 
 }

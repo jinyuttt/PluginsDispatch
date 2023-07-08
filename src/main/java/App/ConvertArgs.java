@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * 获取参数
+ * 获取参数 转换
  */
 public class ConvertArgs {
     static    Gson gson = new Gson();

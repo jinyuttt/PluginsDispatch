@@ -10,15 +10,20 @@ public class LinkNode {
     /**
      * 所有初始组件
      */
-    public List<PluginNode> iniPlugin;
+    public List<PluginNode> iniPlugin=null;
 
     /**
      * 业务流程组件
      */
-    public  PluginNode root;
+    public  PluginNode root=null;
 
     /**
      * 业务流名称
      */
-    public  String name;
+    public  String name="";
+
+    /**
+     * 任务完成组件名称
+     */
+    public  String taskComplete="";
 }

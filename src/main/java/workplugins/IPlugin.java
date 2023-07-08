@@ -1,7 +1,7 @@
 package workplugins;
 
 import PluginEntity.MsgData;
-import HanderImpl.BusHander;
+import HandlerImpl.BusHandler;
 
 /**
  * 组件基本功能
@@ -28,13 +28,17 @@ public interface IPlugin {
 
 
 
+
+
+
     /**
      * 停止
+     * @param taskid 任务id
      */
-    void  stop();
+    void stop(String taskid);
 
-  default IBusHanlder getHander()
+  default IBusHandler getHander()
   {
-            return  new BusHander();
+            return  new BusHandler();
   }
 }

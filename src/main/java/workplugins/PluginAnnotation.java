@@ -26,6 +26,7 @@ public @interface PluginAnnotation {
      */
     String  output() default "";
 
+
     String value() default "";
 
     /**

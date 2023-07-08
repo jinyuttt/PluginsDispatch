@@ -1,7 +1,7 @@
 package pluginimpl;
 
 import PluginEntity.MsgData;
-import workplugins.IBusHanlder;
+import workplugins.IBusHandler;
 import workplugins.IInputPlugin;
 import workplugins.PluginAnnotation;
 
@@ -10,7 +10,7 @@ public class CollectSingle implements IInputPlugin {
     @Override
     public void start() {
         System.out.println("Cap_start");
-        IBusHanlder hander=getHander();
+        IBusHandler hander=getHander();
         hander.addBusData(new MsgData() {
             @Override
             public int hashCode() {
@@ -32,6 +32,11 @@ public class CollectSingle implements IInputPlugin {
 
     @Override
     public void response(byte[] data) {
+
+    }
+
+    @Override
+    public void stop(String taskid) {
 
     }
 

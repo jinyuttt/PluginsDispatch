@@ -1,5 +1,7 @@
 package engin;
 
+import workplugins.ITask;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,4 +20,9 @@ public class PluginEngine {
   * 组件绑定主题
   */
  public  static Map<String,List<PluginNode>> topic=new HashMap<>();
+
+ /**
+  * 任务插件
+  */
+ public  static Map<String, ITask> taskMap=new HashMap<>();
 }

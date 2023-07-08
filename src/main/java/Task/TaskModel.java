@@ -15,4 +15,8 @@ public class TaskModel {
      */
     public  String taskid="1";
 
+
+    public  String taskopt="start";
+
+
 }
