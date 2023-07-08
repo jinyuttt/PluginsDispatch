@@ -3,6 +3,9 @@ package App;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 配置数据
+ */
 public class AppCst {
 
     /**
