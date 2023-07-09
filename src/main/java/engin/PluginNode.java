@@ -63,9 +63,9 @@ public class PluginNode {
     public Policy policy=Policy.Order;
 
     /**
-     * 轮训策略
+     * 权重
      */
-    public int  index=0;
+    public  int weight=1;
 
     /**
      * 订阅主题

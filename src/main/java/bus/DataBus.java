@@ -1,5 +1,6 @@
 package bus;
 import App.ConvertArgs;
+import Balancing.LoadBlanceInstance;
 import PluginEntity.MsgData;
 import Task.TaskEntity;
 import cache.CacheUtil;
@@ -10,6 +11,9 @@ import org.apache.commons.logging.LogFactory;
 import workplugins.Policy;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
@@ -18,6 +22,7 @@ import java.util.concurrent.BlockingQueue;
  */
 public class DataBus {
  Log logger= LogFactory.getLog(DataBus.class);
+
         private static class LazyHolder {
             private static final DataBus INSTANCE = new DataBus();
         }
@@ -36,10 +41,13 @@ public class DataBus {
      * 需要移除的数据
      */
     private BlockingQueue<Long> msgqueue=new ArrayBlockingQueue<>(10000);
-        private DataBus (){
+
+    private Map<String, LoadBlanceInstance> map=new HashMap<>();
+
+    private DataBus () {
             removeMsg();
             start();
-        }
+    }
 
     /**
      * 加入数据
@@ -212,16 +220,45 @@ public class DataBus {
                                                     tmp.plugin.addData(rsp);
                                                 }
                                             }
-                                            else  if(node.policy==Policy.Order)
-                                            {
-                                                 int index= node.index%node.pluginList.size();
-                                                  var cur= node.pluginList.get(index);
-                                                  cur.plugin.addData(rsp);
-                                                  node.index++;
+                                            else  if(node.policy==Policy.Order) {
+                                                if (node.flage == null | node.flage.isEmpty()) {
+                                                    node.flage = String.valueOf(new Random().nextInt());
+                                                }
+                                                LoadBlanceInstance blanceInstance = map.get(node.flage);
+                                                if (blanceInstance == null) {
+                                                    blanceInstance = new LoadBlanceInstance();
+                                                    map.put(node.flage, blanceInstance);
+                                                    Map<String, Integer> tp = new HashMap<>();
+                                                    for (PluginNode tmp : node.pluginList
+                                                    ) {
+                                                        tp.put(tmp.flage, tmp.weight);
+                                                    }
+                                                    blanceInstance.init(tp);
+                                                }
+                                                String flage = blanceInstance.Round();
+                                                var cur = node.pluginList.stream().filter(p -> p.flage.equals(flage)).findFirst().get();
+                                                cur.plugin.addData(rsp);
                                             }
-                                            else  if(node.policy==Policy.Robin)
-                                            {
+                                            else  if(node.policy==Policy.Robin) {
                                                 //负载均衡，准备算法
+                                                if (node.flage == null | node.flage.isEmpty()) {
+                                                    node.flage = String.valueOf(new Random().nextInt());
+                                                }
+                                                LoadBlanceInstance blanceInstance = map.get(node.flage);
+                                                if (blanceInstance == null) {
+                                                    blanceInstance = new LoadBlanceInstance();
+                                                    map.put(node.flage, blanceInstance);
+                                                    Map<String, Integer> tp = new HashMap<>();
+                                                    for (PluginNode tmp : node.pluginList
+                                                    ) {
+                                                        tp.put(tmp.flage, tmp.weight);
+                                                    }
+                                                    blanceInstance.init(tp);
+                                                }
+
+                                                String key = blanceInstance.consistencyHashLoadBlance();
+                                                var cur = node.pluginList.stream().filter(p -> p.flage.equals(key)).findFirst().get();
+                                                cur.plugin.addData(rsp);
 
                                             }
                                             else

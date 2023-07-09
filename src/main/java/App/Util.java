@@ -337,6 +337,11 @@ public class Util {
                     {
                         tmp.devid= attr.getText();
                     }
+                    attr=nodetmp.attribute("weight");//实例对应的设备id
+                    if(attr!=null)
+                    {
+                        tmp.devid= attr.getText();
+                    }
                     attr=element.attribute("subtopic");//实例对应的订阅
                     if(attr!=null)
                     {
