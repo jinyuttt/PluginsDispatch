@@ -19,5 +19,9 @@ public interface IBusHandler {
      */
     void  reply(Object obj);
 
-
+    /**
+     * 需要处理的日志，例如需要显示的组件结果
+     * @param msg
+     */
+    void  log(String msg);
 }

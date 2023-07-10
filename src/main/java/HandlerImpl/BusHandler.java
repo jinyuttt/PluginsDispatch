@@ -3,6 +3,8 @@ package HandlerImpl;
 import App.EnginCore;
 import PluginEntity.MsgData;
 import bus.DataBus;
+import bus.LogBus;
+import bus.LogMsg;
 import bus.MsgBus;
 import com.google.gson.Gson;
 import workplugins.IBusHandler;
@@ -39,6 +41,11 @@ public class BusHandler implements IBusHandler {
        }
         //todo
 
+    }
+
+    @Override
+    public void log(String msg) {
+        LogBus.getInstance().add(new LogMsg("","",msg));
     }
 
 
