@@ -1,6 +1,6 @@
 package Balancing;
 
-/*
+/**
 最小延迟（Latency-Aware）
  */
 public class EWMA {

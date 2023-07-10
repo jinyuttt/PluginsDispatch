@@ -162,26 +162,23 @@ public class DataBus {
                        //找到对应的流程
                         if(model==null)
                         {
-                            logger.error("流程对应数据没有");
+                            logger.error("数据没有对应的任务，数据标识异常");
                             continue;
                         }
+                        //根据任务消息找到配置的流程
                         var linkNode = PluginEngine.lst.parallelStream().filter(p->p.name==model.name).findFirst();
-                        if(linkNode==null)
-                        {
+                        if(linkNode==null) {
                             logger.error("流程对应错误，检查任务与流程的对应");
                             continue;
                         }
                         var next = linkNode.get().root;
                         PluginNode node=null;
-                        if(msg.flage.equals(TaskEntity.rootFlage))
-                        {
+                        if(msg.flage.equals(TaskEntity.rootFlage)) {
                             //单独处理接收的任务启动
-                            node=new PluginNode();
-                            node.pluginList=new ArrayList<>();
-                            node.nextNode=new ArrayList<>();
-                            node.nextNode.add(node);
-
-
+                            node = new PluginNode();
+                            node.pluginList = new ArrayList<>();
+                            node.nextNode = new ArrayList<>();
+                            node.nextNode.add(node);//任务数据，后续继续处理就变成第一层级。
                         }
                         else {
                             //找到数据节点
@@ -195,6 +192,7 @@ public class DataBus {
                         var child=node.nextNode;
                         if(child!=null)
                         {
+                            //设计来说，此时数据应该进入到任务处理组件Itask了，有此异常就是代码bug
                            logger.error("插件无下级节点，不应该返回数据或配置流程错误");
                            continue;
                         }

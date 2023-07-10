@@ -1,22 +1,33 @@
 package App;
 
-import Balancing.LoadBlance;
-import Balancing.LoadBlanceInstance;
-import Balancing.MurmurHash;
-import Balancing.ServerNode;
 import Task.TaskEntity;
 import Task.TaskModel;
 import bus.MsgBus;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.jayway.jsonpath.JsonPath;
 
 import java.io.FileNotFoundException;
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class Application {
     public  static void  main(String[] args) throws FileNotFoundException {
+
+        String strr="{\n" +
+                "    \"foo\":{\n" +
+                "        \"bar\":\"value\"\n" +
+                "    }\n" +
+                "}";
+      var doc=  JsonPath.parse(strr);
+        Gson gson=new Gson();
+      JsonObject obj=  gson.fromJson(strr,JsonObject.class);
+     //   JsonElement jsonElement=
+      obj.addProperty("foo.mm","123");
+
+      doc.set("$.foo.bar",123);
+     System.out.println( doc.jsonString());
+
 
         var map = YamlUtil.getApplication();
         Map<String, String> maptask = (Map<String, String>) map.get("tasktopic");
