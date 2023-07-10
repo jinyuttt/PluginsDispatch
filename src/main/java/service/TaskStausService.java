@@ -14,9 +14,9 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 @PluginAnnotation(name = "comstatus")
 public class TaskStausService implements ITask {
 
-    Map<String,Boolean>map=new HashMap<>();
-    Map<String,Object>mapObj=new HashMap<>();
-    Map<String,String> mapArgs=new HashMap<>();
+    Map<String,Boolean>map=new HashMap<>();//任务状态
+    Map<String,Object>mapObj=new HashMap<>();//任务结构
+    Map<String,String> mapArgs=new HashMap<>();//任务参数
     ConcurrentLinkedQueue<Object> queue=new ConcurrentLinkedQueue<>();
 
     volatile  boolean isinit=false;//初始化
@@ -64,8 +64,8 @@ public class TaskStausService implements ITask {
                         artt = c.split("=");
                     }
                  try {
-                     interpreter.set(artt[0],  JsonPath.read("$"+tjson,artt[0]));
-                     interpreter.set(artt[1],  JsonPath.read("$"+json,artt[1]));
+                     interpreter.set(artt[0],  JsonPath.read("$."+tjson,artt[0]));
+                     interpreter.set(artt[1],  JsonPath.read("$."+json,artt[1]));
                      boolean ret= (boolean) interpreter.eval(c);
                      if(ret)
                      {
@@ -99,7 +99,7 @@ public class TaskStausService implements ITask {
 
     @Override
     public boolean isComplete(String taskid) {
-        return false;
+        return map.getOrDefault(taskid,false);
     }
 
     @Override

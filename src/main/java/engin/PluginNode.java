@@ -48,6 +48,11 @@ public class PluginNode {
     public IPlugin plugin;
 
     /**
+     * 显示名称
+     */
+    public String display="";
+
+    /**
      * 本节点多实例
      */
     public List<PluginNode> pluginList;

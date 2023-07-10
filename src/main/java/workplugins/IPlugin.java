@@ -2,6 +2,8 @@ package workplugins;
 
 import PluginEntity.MsgData;
 import HandlerImpl.BusHandler;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * 组件基本功能
@@ -27,10 +29,6 @@ public interface IPlugin {
     void response(byte[]data);
 
 
-
-
-
-
     /**
      * 停止
      * @param taskid 任务id
@@ -39,6 +37,12 @@ public interface IPlugin {
 
   default IBusHandler getHander()
   {
-            return  new BusHandler();
+      return  new BusHandler();
+  }
+
+  default Log getLogger()
+  {
+      Log log= LogFactory.getLog("plugin");
+      return  log;
   }
 }

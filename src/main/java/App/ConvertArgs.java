@@ -57,8 +57,6 @@ public class ConvertArgs {
     private static Object convertMsg(PluginNode node, MsgData msgData,Class<?> cls) {
 
        Object objv= null;
-
-
          var vcur= gson.toJson(msgData);//转成json
          objv=gson.fromJson(vcur,cls);//通过上级数据json创建输入的对象
         JsonElement element =gson.toJsonTree(objv,cls);//将对象转成json处理，

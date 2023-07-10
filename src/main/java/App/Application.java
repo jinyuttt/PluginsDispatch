@@ -14,19 +14,6 @@ import java.util.Map;
 public class Application {
     public  static void  main(String[] args) throws FileNotFoundException {
 
-        String strr="{\n" +
-                "    \"foo\":{\n" +
-                "        \"bar\":\"value\"\n" +
-                "    }\n" +
-                "}";
-      var doc=  JsonPath.parse(strr);
-        Gson gson=new Gson();
-      JsonObject obj=  gson.fromJson(strr,JsonObject.class);
-     //   JsonElement jsonElement=
-      obj.addProperty("foo.mm","123");
-
-      doc.set("$.foo.bar",123);
-     System.out.println( doc.jsonString());
 
 
         var map = YamlUtil.getApplication();

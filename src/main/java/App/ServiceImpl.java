@@ -2,9 +2,7 @@ package App;
 
 import Task.TaskEntity;
 import Task.TaskModel;
-import bus.DataBus;
-import bus.MsgBus;
-import bus.MsgData;
+import bus.*;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -50,22 +48,28 @@ public class ServiceImpl {
             {
               MsgData msg= bus.getData();
               //根据主题转组件
-                if(msg.topic.equals(TaskEntity.tasktopic))
-                {
+                if(msg.topic.equals(TaskEntity.tasktopic)) {
                     //接收到了任务消息
-                  var model=  gson.fromJson(new String(msg.data),TaskModel.class);
-                  EnginCore.getInstance().startTask(model);
-                  var linkNode = PluginEngine.lst.parallelStream().filter(p->p.name==model.name).findFirst();
-                    if(linkNode==null)
-                    {
-                        logger.error("流程对应错误，检查任务与流程的对应");
+                    var model = gson.fromJson(new String(msg.data), TaskModel.class);
+                    if (model.taskopt.equals("stop")) {
+                        logger.info("任务停止：" + model.taskid);
+                        LogBus.getInstance().add(new LogMsg(model.taskid, "","停止任务"));
+                        EnginCore.getInstance().stopTask(model.taskid);
                         continue;
                     }
-                    else
-                    {
-                        String name=  linkNode.get().taskComplete;
-                        var t= PluginEngine.taskMap.get(name);
-                       var map= AppCst.mapTask.get(name);
+
+                    var linkNode = PluginEngine.lst.parallelStream().filter(p -> p.name == model.name).findFirst();
+                    if (linkNode == null) {
+                        logger.error("流程对应错误，检查任务与流程的对应");
+                        continue;
+                    } else {
+                        logger.info("任务开始：" + model.taskid);
+                        LogBus.getInstance().add(new LogMsg(model.taskid, "","开始任务"));
+                        EnginCore.getInstance().startTask(model);
+                        //任务状态组件
+                        String name = linkNode.get().taskComplete;
+                        var t = PluginEngine.taskMap.get(name);
+                        var map = AppCst.mapTask.get(name);
                         t.initArg(map);
                         t.init(model);
                         continue;

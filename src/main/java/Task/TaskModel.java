@@ -16,6 +16,9 @@ public class TaskModel {
     public  String taskid="1";
 
 
+    /**
+     * 启动或者停止
+     */
     public  String taskopt="start";
 
 

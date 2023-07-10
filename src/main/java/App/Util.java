@@ -255,6 +255,11 @@ public class Util {
            String count= attr.getText();
            num=Integer.valueOf(count);
         }
+        attr=element.attribute("displayname");//读取节点组件唯一标识
+        if(attr!=null)
+        {
+            pluginNode.display=  attr.getText();
+        }
         attr=element.attribute("subtopic");//读取节点的订阅主题
         if(attr!=null)
         {

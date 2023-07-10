@@ -2,7 +2,7 @@
 <DW>
         <Link name="bil" taskcomplete="comstatus">
             <Plugin name="DB"/>
-            <Plugin name="Cap" Flage="PP" condtion="devid" instance="1" arg=""  subtopic="" displayname="" >
+            <Plugin name="Cap" Flage="PP" condtion="devid" instance="1" arg=""  subtopic="" displayname="" wight="" >
                 <Plugin name="DDC" condtion="DevID" convert="arg.ini">
                     <Args>
                         <taskid>task_id</taskid>

@@ -56,7 +56,7 @@ public class DataBus {
     public void  addData(MsgData obj) {
             queue.add(obj);
             CacheUtil.getInstance().putmap(obj.flage,String.valueOf(obj.msgno),obj);
-            var log=new LogProcess();
+            var log=new LogMsg();
             log.taskid=String.valueOf(obj.taskid);
             log.flage=obj.flage;
             LogBus.getInstance().add(log);
@@ -184,7 +184,7 @@ public class DataBus {
                             //找到数据节点
                             node = getFlageNode(next, msg.flage);
                             if (node == null) {
-                                logger.error("插件标识与数据标识不匹配，请检查流程中插件标识与数据标识,数据局标识：" + msg.flage);
+                                logger.error("插件标识与数据标识不匹配，请检查流程中插件标识与数据标识,数据标识：" + msg.flage);
                                 continue;
                             }
                         }
@@ -219,7 +219,7 @@ public class DataBus {
                                                 }
                                             }
                                             else  if(node.policy==Policy.Order) {
-                                                if (node.flage == null | node.flage.isEmpty()) {
+                                                if (node.flage == null||node.flage.isEmpty()) {
                                                     node.flage = String.valueOf(new Random().nextInt());
                                                 }
                                                 LoadBlanceInstance blanceInstance = map.get(node.flage);
@@ -239,7 +239,7 @@ public class DataBus {
                                             }
                                             else  if(node.policy==Policy.Robin) {
                                                 //负载均衡，准备算法
-                                                if (node.flage == null | node.flage.isEmpty()) {
+                                                if (node.flage == null || node.flage.isEmpty()) {
                                                     node.flage = String.valueOf(new Random().nextInt());
                                                 }
                                                 LoadBlanceInstance blanceInstance = map.get(node.flage);

@@ -153,66 +153,59 @@ public class EnginCore {
      * @param node
      * @param lstP
      */
-   private  void  getNode(PluginNode node, List<IPlugin>lstP)
-   {
-           PluginNode finalNode = node;
-           var tmp = lstP.stream().filter(p -> {
-               PluginAnnotation name = p.getClass().getAnnotation(PluginAnnotation.class);
-               String cur= finalNode.name;
-               if (name.name().toLowerCase().equals(cur.toLowerCase())) {
-                   return true;
-               }
-               return false;
-           }).findFirst();
-           try {
-               //节点创建实例
-               node.plugin = tmp.get().getClass().getConstructor().newInstance();
-               if(node.pluginList!=null)
-               {
-                   //从根开始，遍历所有组件
-                   for (PluginNode tmpnode: node.pluginList
-                   ) {
-                       tmpnode.plugin=tmp.get().getClass().getConstructor().newInstance();
-                       if(IInputPlugin.class.isInstance(tmpnode.plugin)) {
-                           //如果是输入插件则先启动
-                           IInputPlugin inputPlugin = (IInputPlugin) tmpnode.plugin;
-                           newCachedThreadPool.execute(new Runnable() {
-                               @Override
-                               public void run() {
-                                   inputPlugin.init(tmpnode.arg);
-                                   inputPlugin.start();
+   private  void  getNode(PluginNode node, List<IPlugin>lstP) {
+       PluginNode finalNode = node;
+       var tmp = lstP.stream().filter(p -> {
+           PluginAnnotation name = p.getClass().getAnnotation(PluginAnnotation.class);
+           String cur = finalNode.name;
+           if (name.name().toLowerCase().equals(cur.toLowerCase())) {
+               return true;
+           }
+           return false;
+       }).findFirst();
+       try {
+           //节点创建实例
+           node.plugin = tmp.get().getClass().getConstructor().newInstance();
+           if (node.pluginList != null) {
+               //从根开始，遍历所有组件
+               for (PluginNode tmpnode : node.pluginList
+               ) {
+                   tmpnode.plugin = tmp.get().getClass().getConstructor().newInstance();
+                   if (IInputPlugin.class.isInstance(tmpnode.plugin)) {
+                       //如果是输入插件则先启动
+                       IInputPlugin inputPlugin = (IInputPlugin) tmpnode.plugin;
+                       newCachedThreadPool.execute(new Runnable() {
+                           @Override
+                           public void run() {
+                               inputPlugin.init(tmpnode.arg);
+                               inputPlugin.start();
 
-                               }
-                           });
-                       }
-
-                   }
-               }
-               else
-               {
-                   node.plugin.init(node.arg);
-                   //本节点单例时
-                   if(IInputPlugin.class.isInstance(node.plugin))
-                   {
-                       IInputPlugin inputPlugin= (IInputPlugin) node.plugin;
-                       inputPlugin.start();
+                           }
+                       });
                    }
 
                }
+           } else {
+               node.plugin.init(node.arg);
+               //本节点单例时
+               if (IInputPlugin.class.isInstance(node.plugin)) {
+                   IInputPlugin inputPlugin = (IInputPlugin) node.plugin;
+                   inputPlugin.start();
+               }
+
            }
-           catch (Exception ex)
-           {
-               ex.printStackTrace();
-           }
-          //
+       } catch (Exception ex) {
+           ex.printStackTrace();
+       }
+       //
        //本节点创建完成
-       if(node.nextNode!=null) {
+       if (node.nextNode != null) {
            for (PluginNode child : node.nextNode
            ) {
-               getNode(child,lstP);
+               getNode(child, lstP);
            }
        }
-       }
+   }
 
     /**
      * 停止所有

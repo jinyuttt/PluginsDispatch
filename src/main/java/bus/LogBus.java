@@ -19,16 +19,18 @@ public class LogBus {
     public static final LogBus getInstance() {
         return LogBus.LazyHolder.INSTANCE;
     }
+
     private LogBus()
     {
         init();
     }
 
     private Gson gson=new Gson();
+
     /**
      * 所有返回的数据
      */
-    private BlockingQueue<LogProcess> queue=new ArrayBlockingQueue<>(1000);
+    private BlockingQueue<LogMsg> queue=new ArrayBlockingQueue<>(1000);
 
 
     /**
@@ -81,7 +83,8 @@ public class LogBus {
                      var lst= PluginEngine.lst.stream().filter(p->p.name.equals(model.name));
                      var link=lst.findFirst();
                      var node=getFlageNode(link.get().root,log.flage);
-                     log.msg=String.format("接收到数据{0},设备{1}",node.flage,node.devid);
+                     if (log.msg!=null)
+                     log.msg=String.format("接收到{2}数据{0},设备{1}",node.flage,node.devid,node.display);
                      var msg=gson.toJson(log);
                      MsgBus.send("processlog",msg);
 
@@ -95,7 +98,7 @@ public class LogBus {
         thread.setDaemon(true);
         thread.start();
     }
-    public void  add(LogProcess obj)
+    public void  add(LogMsg obj)
     {
         queue.offer(obj);
     }
